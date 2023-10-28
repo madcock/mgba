@@ -1355,7 +1355,11 @@ void retro_get_system_av_info(struct retro_system_av_info* info) {
 
 	info->geometry.aspect_ratio = width / (double) height;
 	info->timing.fps = core->frequency(core) / (float) core->frameCycles(core);
+#if !defined(SF2000)
 	info->timing.sample_rate = SAMPLE_RATE;
+#else
+	info->timing.sample_rate = 11025;
+#endif
 }
 
 void retro_init(void) {
