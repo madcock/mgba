@@ -359,12 +359,19 @@ bool mCoreSaveStateNamed(struct mCore* core, struct VFile* vf, int flags) {
 		uint64_t* creationUsec = malloc(sizeof(*creationUsec));
 		if (creationUsec) {
 #if !defined(_MSC_VER)
+#if !defined(SF2000)
 			struct timeval tv;
 			if (!gettimeofday(&tv, 0)) {
 				uint64_t usec = tv.tv_usec;
 				usec += tv.tv_sec * 1000000LL;
 				STORE_64LE(usec, 0, creationUsec);
 			}
+#else
+			if (1) {
+				free(creationUsec);
+				creationUsec = 0;
+			}
+#endif //!defined(SF2000)
 #else
 			struct timespec ts;
 			if (timespec_get(&ts, TIME_UTC)) {
